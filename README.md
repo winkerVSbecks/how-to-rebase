@@ -59,7 +59,7 @@ At this point the rebase is complete 🎉 Last step, push your changes to remote
 git push origin my-feature -f
 ```
 
-Yes, that's a force push there. Because you have successfully re-written git history. Where you previously had multiple commits you now only have one commits.
+Yes, that's a force push there. Because you have successfully re-written git history. Where you previously had multiple commits you now only have one commit.
  
 
 ### Resolving Conflicts
