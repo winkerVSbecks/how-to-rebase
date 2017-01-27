@@ -154,28 +154,28 @@ The only difference between this setup and previous is that you will be fetching
 Let us break this down step-by-step:
 
 ```bash
-# 1️⃣ Start by updating your fork from the main repo.
+# (1) Start by updating your fork from the main repo.
 # At this point have checkout out master.
 git fetch upstream
 git rebase upstream/master
 
-# 2️⃣ Create a new branch for your feature
+# (2) Create a new branch for your feature
 git checkout -b my-feature
 
-# 3️⃣ Implement the feature and commit your changes as usual.
+# (3) Implement the feature and commit your changes as usual.
 # This might be single or multiple commits.
 
-# 4️⃣ Push your changes to origin
+# (4) Push your changes to origin
 git push origin my-feature
 
-# 5️⃣ Before we rebase we must get the latest upstream
+# (5) Before we rebase we must get the latest upstream
 git fetch upstream
 
-# 6️⃣ Next, do the actual rebase. This point onwards it is the 
+# (6) Next, do the actual rebase. This point onwards it is the 
 # same process as single remote workflow above.
 git rebase upstream/master
 
-# 7️⃣ Push your changes to origin not upstream!
+# (7) Push your changes to origin not upstream!
 git push origin my-feature -f
 ```
 
