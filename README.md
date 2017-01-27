@@ -22,7 +22,7 @@ After `git rebase master` this would become:
 - `git rebase -i origin/master` is the interactive version which allows you to do things such as squishing commits.
 
 
-### Workflow
+## Workflow (For Single Remote)
 
 This is assuming:
 
@@ -111,3 +111,74 @@ If you messed something up you can always `git rebase --abort`.
 
 
 Remember to rebase early and often. This will prevent messy merge conflicts. 
+
+
+
+## Undo
+
+Scenario: I messed up conflict resolution during a rebase, pushed changes to remote and lost hours of work 😭
+
+![i've made a huge mistake](ive-made-a-huge-mistake.gif)
+
+Use `git reflog` to undo your rebase. Running the command will show you the [reflog](https://git-scm.com/docs/git-reflog) for your local repository. For example:
+
+
+```
+adc164e HEAD@{0}: rebase -i (finish): returning to refs/heads/my-feature
+adc164e HEAD@{1}: rebase -i (pick): Bugfix: SVG icons on android
+8ab621c HEAD@{2}: rebase -i (start): checkout master
+067be75 HEAD@{3}: checkout: moving from master to my-feature
+8ab621c HEAD@{4}: pull: Fast-forward
+```
+
+In this scenario to undo my rebase I need to run `git reset --hard HEAD@{3}` because that was the last state before I started the rebase.
+
+
+## Workflow (With Multiple Remotes)
+
+This is assuming:
+
+1. There is the main repository that you can only update through pull requests. We will call this remote `upstream`.
+2. You create a fork of this repository and clone that locally. We will call your forked remote `origin`.
+
+The setup process will be something like this:
+
+```bash
+git clone git@github.com:[your user name]/[your repo].git
+cd [your repo]
+git remote add upstream git@github.com:rangle/[your repo].git
+```
+
+The only difference between this setup and previous is that you will be fetching `upstream` and rebasing against `upstream/master`. Then push to your forked `origin`. The actual rebase & conflict resolution process is the same. 
+
+Let us break this down step-by-step:
+
+```bash
+# 1️⃣ Start by updating your fork from the main repo.
+# At this point have checkout out master.
+git fetch upstream
+git rebase upstream/master
+
+# 2️⃣ Create a new branch for your feature
+git checkout -b my-feature
+
+# 3️⃣ Implement the feature and commit your changes as usual.
+# This might be single or multiple commits.
+
+# 4️⃣ Push your changes to origin
+git push origin my-feature
+
+# 5️⃣ Before we rebase we must get the latest upstream
+git fetch upstream
+
+# 6️⃣ Next, do the actual rebase. This point onwards it is the 
+# same process as single remote workflow above.
+git rebase upstream/master
+
+# 7️⃣ Push your changes to origin not upstream!
+git push origin my-feature -f
+```
+
+### Github 
+If you are using github then a lot of this stuff can be done through their GUI. Read more about it [here](https://github.com/blog/2243-rebase-and-merge-pull-requests).
+![github squash and rebase features](github.png)
