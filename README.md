@@ -13,7 +13,7 @@ Assume the following git history where you are working on the `my-feature` branc
 After `git rebase master` this would become:
 
 ```
-                  A'--B'--C' my-feature
+                  A--B--C my-feature
                  /
     D---E---F---G master
 ```
